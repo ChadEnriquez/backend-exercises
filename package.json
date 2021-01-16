@@ -8,5 +8,8 @@
     "start": "node index.js"
   },
   "author": "CA ENRIQUEZ",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "fastify": "^3.10.1"
+  }
 }
