@@ -1,4 +1,4 @@
-const fastify = require("fastify");
+const fastify = require("fastify")
 const { route } = require("./route")
 
 /**
@@ -10,7 +10,11 @@ exports.build = async (opts = {
     logger: true, 
     trustProxy: true}) => {
         //initialize the server = Fastify
-        const app = fastify(opts);
-        route(app);
-        return app;
-};
+        const app = fastify(opts)
+        route(app)
+        return app
+}
+
+/**
+ * ENRIQUEZ, CHAD ANDREI A.
+ */
