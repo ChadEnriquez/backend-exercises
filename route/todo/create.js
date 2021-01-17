@@ -21,7 +21,17 @@ exports.create = (app) => {
             //gets text and done
             //default is false
             //returns empty object
-            const { text, done = false } = body
+            const { text, done = false } = body || {}
+            if (!text){
+                return response
+                    .code(400)
+                    .send({
+                        success: false, 
+                        code: "todo/malformed",
+                        message: "Payload doesnt have text property"
+                    })
+            }
+
             const filename = join(__dirname, "../../database.json")
             const encoding = "utf8"
             const databaseStringConts = readFileSync(filename, encoding)
