@@ -27,7 +27,6 @@ describe("For the route for creation of todo POST: (/todo)", () => {
             }
             writeFileSync(filename, JSON.stringify({ todos }, null, 2), encoding)
         }
-        todos.splice()
     })
     //happy path
     it("It should return { success:true, data: (new todo object) } and statusCode of 200 when called using POST", async () => {

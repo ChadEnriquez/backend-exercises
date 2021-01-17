@@ -1,5 +1,6 @@
 const { create } = require("./create")
-const { getMany } = ("./get-many")
+const { getMany } = require("./get-many")
+const { get } = require("./get")
 
 /**
  * initialize routes for creating todo
@@ -8,6 +9,7 @@ const { getMany } = ("./get-many")
 exports.todo = (app) => {
     create(app)
     getMany(app)
+    get(app)
 }
 
 /**

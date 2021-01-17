@@ -7,8 +7,8 @@ const { route } = require("./route")
  * @returns {*} 
  */
 exports.build = async (opts = {
-    logger: true, 
-    trustProxy: true}) => {
+    logger: false, 
+    trustProxy: false}) => {
         //initialize the server = Fastify
         const app = fastify(opts)
         route(app)

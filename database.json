@@ -1,38 +1,11 @@
 {
   "todos": [
     {
-      "id": "abeab2cd-2bac-4316-85ef-8cbf7de01f37",
-      "text": "this is the original todo",
+      "id": "327ddc38-5a20-4b1f-a828-550c3565227a",
+      "text": "Sinend ni Ian",
       "done": false,
-      "dateCreated": 1610800971693,
-      "dateUp": 1610800971693
-    },
-    {
-      "id": "8388e150-3205-45ff-96f8-a6f333621d12",
-      "text": "this is a todo 1",
-      "done": false,
-      "dateCreated": 1610823780040,
-      "dateUp": 1610823780040
-    },
-    {
-      "id": "63c46d3c-c741-4bdb-8961-a6dde631f258",
-      "text": "this is a todo 2",
-      "done": false,
-      "dateCreated": 1610823820510,
-      "dateUp": 1610823820510
-    },
-    {
-      "id": "ebb6fe3b-e297-4b6c-9e46-b81ee3506453",
-      "text": "this is a todo 3",
-      "done": false,
-      "dateCreated": 1610823933088,
-      "dateUp": 1610823933088
-    },
-    {
-      "id": "213389d1-868e-4766-8582-795e7d32a9a8",
-      "text": "this is a todo 4",
-      "done": false,
-      "dateCreated": 1610823975865,
-      "dateUp": 1610823975865
-    }]
+      "dateCreated": 1610918968398,
+      "dateUp": 1610918968398
+    }
+  ]
 }
