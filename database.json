@@ -2,10 +2,31 @@
   "todos": [
     {
       "id": "327ddc38-5a20-4b1f-a828-550c3565227a",
-      "text": "Sinend ni Ian",
-      "done": false,
+      "text": "This is a todo",
+      "done": true,
       "dateCreated": 1610918968398,
       "dateUp": 1610918968398
+    },
+    {
+      "id": "8a41f0b1-fc47-4041-9f08-0d9ed702a6cc",
+      "text": "this is a todo",
+      "done": false,
+      "dateCreated": 1610922928185,
+      "dateUp": 1610922928185
+    },
+    {
+      "id": "355229e8-9fc2-42a4-ad13-a6ea82580b64",
+      "text": "this is a todo",
+      "done": false,
+      "dateCreated": 1610923813349,
+      "dateUp": 1610923813349
+    },
+    {
+      "id": "b990a785-abbf-4579-a505-7e424bfd88fb",
+      "text": "this is a todo 2",
+      "done": false,
+      "dateCreated": 1610923813442,
+      "dateUp": 1610923813442
     }
   ]
 }
