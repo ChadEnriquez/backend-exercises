@@ -3,7 +3,7 @@ const { delay } = require("../../lib/delay")
 const { writeFileSync } = require("fs")
 const { join } = require("path")
 const { build } = require("../../app")
-const should = require("should")
+require("should")
 require("tap").mochaGlobals()
 
 describe("For the route for getting many todos GET: (/todo)", () => {
@@ -72,6 +72,30 @@ describe("For the route for getting many todos GET: (/todo)", () => {
           done.should.equal(doneDatabase)
       }
   })
+
+  it("It should return { success:true, data: array of todos } and statusCode of 200 when called using GET and has limit of 2 items", async () => {
+    const response = await app.inject({
+        method: "GET",
+        url: "/todo?limit=2",
+    })
+    const payload = response.json()
+    const { statusCode } = response
+    const { success, data } = payload
+    success.should.equal(true)
+    statusCode.should.equal(200)
+    data.length.should.equal(2)
+    
+    const todos = getTodos(filename, encoding)
+
+    for (const todo of data) {
+        const { text, done, id } = todo
+        const index = todos.findIndex(todo => todo.id === id)
+        index.should.not.equal(-1)
+        const { text: textDatabase, done: doneDatabase } = todos[index]
+        text.should.equal(textDatabase)
+        done.should.equal(doneDatabase)
+    }
+})
 
   it("It should return { success:true, data: array of todos } and statusCode of 200 when called using GET and has default of 3 items and should be descending order", async () => {
       const response = await app.inject({
