@@ -1,21 +1,40 @@
-const mongoose = require("mongoose");
-
-// setup connection configuration to mongodb
-mongoose.connect("mongodb://localhost:27017/test", {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-});
+const { v4: uuid } = require("uuid");
 
 /**
- * Creates connection to database
- * @returns {Promise}
+ * This exports the model for todo
+ * @param {import('mongoose').Mongoose} mongoose
  */
-// men di kita rinig
-exports.connect = () =>
-	new Promise((resolve, reject) => {
-		const { connection } = mongoose;
-		connection.on("error", reject);
-		connection.once("open", resolve);
+module.exports = (mongoose) => {
+	const { Schema } = mongoose;
+
+	const todoSchema = new Schema({
+		id: {
+			type: String,
+			immutable: true,
+			index: true,
+			unique: true,
+			default: uuid,
+		},
+		text: {
+			type: String,
+			required: true,
+		},
+		done: {
+			type: Boolean,
+			required: true,
+			default: false,
+		},
+		dateCreated: {
+			type: Number,
+			required: true,
+			default: () => new Date().getTime(),
+		},
+		dateUp: {
+			type: Number,
+			required: true,
+			default: () => new Date().getTime(),
+		},
 	});
 
-exports.mongoose = mongoose;
+	return mongoose.model("Todo", todoSchema);
+};

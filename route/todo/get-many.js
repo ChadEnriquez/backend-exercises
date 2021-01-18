@@ -1,50 +1,43 @@
-const { getTodos } = require("../../lib/get-todos")
-const { join } = require("path")
+const { Todo } = require("../../db");
 
 /**
  * Gets many todos
- * 
- * @param {*} app 
+ *
+ * @param {*} app
  */
-exports.getMany = app => {
-    /**
-     * Gets todos from database
-     * @param {import('fastify').FastifyRequest} request
-     */
-    app.get("/todo", (request) => {
-        const { query } = request
-        const { limit = 3, startDate } = query 
-        const filename = join(__dirname, "../../database.json")
-        const encoding = "utf8"
-        const todos = getTodos(filename, encoding)
-        const data = []
+exports.getMany = (app) => {
+	/**
+	 * Gets todos from database
+	 * @param {import('fastify').FastifyRequest} request
+	 */
+	app.get("/todo", async (request) => {
+		const { query } = request;
+		const { limit = 3, startDate } = query;
 
-        //sorts todos
-        //ascending order
-        if (!startDate) {
-            //descending order
-            todos.sort((prev, next) => next.dateUp - prev.dateUp)
-        } else {
-            //ascending order
-            todos.sort((prev, next) => prev.dateUp - next.dateUp)
-        }
-        for ( const todo of todos ) {
-            // no startDate
-            // todoUpdated is within startDate
-            if (!startDate || startDate <= todo.dateUp) {
-                //length below limit
-                if (data.length < limit) {
-                    data.push(todo)
-                }
-            } 
-        }
+		// if startDate, the query
+		// should search the dateUp property
+		// if dateUp is greater than or equal
+		// to the startDate
+		// if no startDate, it will search for
+		// all given the limit
+		const options = startDate
+			? {
+					dateUp: {
+						$gte: startDate,
+					},
+			  }
+			: {};
 
-        //descending order sort
-        data.sort ((prev, next) => next.dateUp - prev.dateUp)
+		const data = await Todo.find(options)
+			.limit(parseInt(limit))
+			.sort({
+				dateUp: -1,
+			})
+			.exec();
 
-        return {
-            success: true,
-            data
-        }
-    })
-}
+		return {
+			success: true,
+			data,
+		};
+	});
+};

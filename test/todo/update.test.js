@@ -1,7 +1,5 @@
-const { getTodos } = require("../../lib/get-todos");
 const { delay } = require("../../lib/delay");
-const { writeFileSync } = require("fs");
-const { join } = require("path");
+const { mongoose, Todo } = require("../../db");
 const { build } = require("../../app");
 const should = require("should");
 require("tap").mochaGlobals();
@@ -9,8 +7,6 @@ require("tap").mochaGlobals();
 describe("For the route for updating one todos PUT: (/todo/:id)", () => {
 	let app;
 	const ids = [];
-	const filename = join(__dirname, "../../database.json");
-	const encoding = "utf8";
 
 	before(async () => {
 		const payloads = [
@@ -39,15 +35,10 @@ describe("For the route for updating one todos PUT: (/todo/:id)", () => {
 
 	after(async () => {
 		//clean database
-		const todos = getTodos(filename, encoding);
 		for (const id of ids) {
-			const index = todos.findIndex((todo) => todo.id === id);
-			//delete id
-			if (index >= 0) {
-				todos.splice(index, 1);
-			}
-			writeFileSync(filename, JSON.stringify({ todos }, null, 2), encoding);
+			await Todo.findOneAndDelete({ id });
 		}
+		await mongoose.connection.close();
 	});
 	// happy path
 	it("It should return { success:true, data: todo } and statusCode of 200 when called using PUT and updates item", async () => {
@@ -66,12 +57,8 @@ describe("For the route for updating one todos PUT: (/todo/:id)", () => {
 		success.should.equal(true);
 		statusCode.should.equal(200);
 
-		const todos = getTodos(filename, encoding);
-		const index = todos.findIndex((todo) => todo.id === id);
-		const todo = todos[index];
+		const todo = await Todo.findOne({ id }).exec();
 
-		text.should.equal("New Todo");
-		done.should.equal(true);
 		text.should.equal(todo.text);
 		done.should.equal(todo.done);
 		id.should.equal(todo.id);
@@ -92,9 +79,7 @@ describe("For the route for updating one todos PUT: (/todo/:id)", () => {
 		success.should.equal(true);
 		statusCode.should.equal(200);
 
-		const todos = getTodos(filename, encoding);
-		const index = todos.findIndex((todo) => todo.id === id);
-		const todo = todos[index];
+		const todo = await Todo.findOne({ id }).exec();
 
 		text.should.equal("New Todo 1");
 		done.should.equal(false);
@@ -118,9 +103,7 @@ describe("For the route for updating one todos PUT: (/todo/:id)", () => {
 		success.should.equal(true);
 		statusCode.should.equal(200);
 
-		const todos = getTodos(filename, encoding);
-		const index = todos.findIndex((todo) => todo.id === id);
-		const todo = todos[index];
+		const todo = await Todo.findOne({ id }).exec();
 
 		done.should.equal(true);
 		text.should.equal(todo.text);

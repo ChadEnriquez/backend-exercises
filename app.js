@@ -1,19 +1,24 @@
-const fastify = require("fastify")
-const { route } = require("./route")
+const fastify = require("fastify");
+const { route } = require("./route");
+const { connect } = require("./db");
 
 /**
- * Initialize server 
+ * Initialize server
  * @param {{ logger: boolean, trustProxy: boolean  }} opts
- * @returns {*} 
+ * @returns {*}
  */
-exports.build = async (opts = {
-    logger: false, 
-    trustProxy: false}) => {
-        //initialize the server = Fastify
-        const app = fastify(opts)
-        route(app)
-        return app
-}
+exports.build = async (
+	opts = {
+		logger: false,
+		trustProxy: false,
+	}
+) => {
+	//initialize the server = Fastify
+	const app = fastify(opts);
+	await connect();
+	route(app);
+	return app;
+};
 
 /**
  * ENRIQUEZ, CHAD ANDREI A.

@@ -1,6 +1,4 @@
-const { getTodos } = require("../../lib/get-todos");
-const { writeFileSync } = require("fs");
-const { join } = require("path");
+const { Todo } = require("../../db");
 /**
  * Update one todos
  *
@@ -15,25 +13,12 @@ exports.update = (app) => {
 	 */
 
 	// "/todo/:id"
-	app.put("/todo/:id", (request, response) => {
+	app.put("/todo/:id", async (request, response) => {
 		const { params, body } = request;
 		const { id } = params;
 		//gets text and done
 		const { text, done } = body || {};
-		const filename = join(__dirname, "../../database.json");
-		const encoding = "utf8";
-		const todos = getTodos(filename, encoding);
-
-		const index = todos.findIndex((todo) => todo.id === id);
-
-		if (index < 0) {
-			return response.code(404).send({
-				success: false,
-				code: "todo/not-found",
-				message: "Todo doesnt exist",
-			});
-		}
-		//expects at least a text or done property
+		// should be getting at least text or done property
 		if (!text && (done === null || done === undefined)) {
 			return response.code(400).send({
 				success: false,
@@ -41,19 +26,28 @@ exports.update = (app) => {
 				message: "Payload doesnt have text property",
 			});
 		}
-		const data = todos[index];
+		const oldData = await Todo.findOne({ id }).exec();
+
+		if (!oldData) {
+			return response.code(404).send({
+				success: false,
+				code: "todo/not-found",
+				message: "Todo doesnt exist",
+			});
+		}
+		const update = {};
 
 		if (text) {
-			data.text = text;
+			update.text = text;
 		}
-		if (done) {
-			data.done = done;
+		if (done !== undefined && done !== null) {
+			update.done = done;
 		}
 
-		todos[index] = data;
-
-		const newDatabaseStringConts = JSON.stringify({ todos }, null, 2);
-		writeFileSync(filename, newDatabaseStringConts, encoding);
+		update.dateUp = new Date().getTime();
+		const data = await Todo.findOneAndUpdate({ id }, update, {
+			new: true,
+		}).exec();
 
 		return {
 			success: true,

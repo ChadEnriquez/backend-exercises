@@ -1,6 +1,4 @@
-const { getTodos } = require("../../lib/get-todos");
-const { writeFileSync } = require("fs");
-const { join } = require("path");
+const { mongoose, Todo } = require("../../db");
 const { build } = require("../../app");
 const should = require("should");
 require("tap").mochaGlobals();
@@ -8,24 +6,16 @@ require("tap").mochaGlobals();
 describe("For the route for creation of todo POST: (/todo)", () => {
 	let app;
 	const ids = [];
-	const filename = join(__dirname, "../../database.json");
-	const encoding = "utf8";
-
 	before(async () => {
 		app = await build();
 	});
 
 	after(async () => {
 		//clean database
-		const todos = getTodos(filename, encoding);
 		for (const id of ids) {
-			const index = todos.findIndex((todo) => todo.id === id);
-			//delete id
-			if (index >= 0) {
-				todos.splice(index, 1);
-			}
-			writeFileSync(filename, JSON.stringify({ todos }, null, 2), encoding);
+			await Todo.findOneAndDelete({ id });
 		}
+		await mongoose.connection.close();
 	});
 	//happy path
 	it("It should return { success:true, data: (new todo object) } and statusCode of 200 when called using POST", async () => {
@@ -53,10 +43,10 @@ describe("For the route for creation of todo POST: (/todo)", () => {
 		text.should.equal("this is a todo");
 		done.should.equal(false);
 
-		const todos = getTodos(filename, encoding);
-		const index = todos.findIndex((todo) => todo.id === id);
-		index.should.not.equal(-1);
-		const { text: textDatabase, done: doneDatabase } = todos[index];
+		const { text: textDatabase, done: doneDatabase } = await Todo.findOne({
+			id,
+		}).exec();
+
 		text.should.equal(textDatabase);
 		done.should.equal(doneDatabase);
 
@@ -81,10 +71,10 @@ describe("For the route for creation of todo POST: (/todo)", () => {
 		text.should.equal("this is a todo 2");
 		done.should.equal(false);
 
-		const todos = getTodos(filename, encoding);
-		const index = todos.findIndex((todo) => todo.id === id);
-		index.should.not.equal(-1);
-		const { text: textDatabase, done: doneDatabase } = todos[index];
+		const { text: textDatabase, done: doneDatabase } = await Todo.findOne({
+			id,
+		}).exec();
+
 		text.should.equal(textDatabase);
 		done.should.equal(doneDatabase);
 

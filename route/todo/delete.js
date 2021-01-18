@@ -1,6 +1,4 @@
-const { getTodos } = require("../../lib/get-todos");
-const { writeFileSync } = require("fs");
-const { join } = require("path");
+const { Todo } = require("../../db");
 
 /**
  * Deletes one todo
@@ -14,30 +12,19 @@ exports.deleteOne = (app) => {
 	 * @param {import('fastify').FastifyRequest} request
 	 * @param {import('fastify').FastifyReply<Response>} response
 	 */
-	app.delete("/todo/:id", (request, response) => {
+	app.delete("/todo/:id", async (request, response) => {
 		const { params } = request;
 		const { id } = params;
 
-		const encoding = "utf8";
-		const filename = join(__dirname, "../../database.json");
-		const todos = getTodos(filename, encoding);
+		const data = await Todo.findOneAndDelete({ id }).exec();
 
-		const index = todos.findIndex((todo) => todo.id === id);
-
-		if (index < 0) {
+		if (!data) {
 			return response.code(404).send({
 				success: false,
 				code: "todo/not-found",
 				message: "Todo doesn't exist",
 			});
 		}
-
-		todos.splice(index, 1);
-
-		// we added null and 2 when stringify-ing the object so that
-		// the JSON file looks visually understandable
-		const newDatabaseStringContents = JSON.stringify({ todos }, null, 2);
-		writeFileSync(filename, newDatabaseStringContents, encoding);
 
 		return {
 			success: true,
