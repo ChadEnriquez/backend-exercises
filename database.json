@@ -2,7 +2,7 @@
   "todos": [
     {
       "id": "327ddc38-5a20-4b1f-a828-550c3565227a",
-      "text": "This is a todo",
+      "text": "This is the original todo",
       "done": true,
       "dateCreated": 1610918968398,
       "dateUp": 1610918968398

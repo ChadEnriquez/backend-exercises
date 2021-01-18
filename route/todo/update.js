@@ -1,7 +1,6 @@
 const { getTodos } = require("../../lib/get-todos")
 const { writeFileSync } = require("fs")
 const { join } = require("path")
-
 /**
  * Update one todos
  * 

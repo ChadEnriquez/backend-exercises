@@ -146,6 +146,8 @@ describe("For the route for getting many todos GET: (/todo)", () => {
       const todos = getTodos(filename, encoding)
       const id = ids[parseInt(Math.random() * ids.length)]
       const index = todos.findIndex(todo => todo.id === id)
+      console.log("todos", todos)
+      console.log("todos[index]", todos[index])
       const { dateUp: startDate } = todos[index]
     
     const response = await app.inject({
