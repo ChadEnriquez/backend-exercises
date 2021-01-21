@@ -1,6 +1,8 @@
 const fastify = require("fastify");
+const swagger = require("fastify-swagger");
 const { route } = require("./route");
 const { connect } = require("./db");
+const { name: title, description, version } = require("./package.json");
 
 /**
  * Initialize server
@@ -15,6 +17,21 @@ exports.build = async (
 ) => {
 	//initialize the server = Fastify
 	const app = fastify(opts);
+	app.register(swagger, {
+		routePrefix: "/docs",
+		exposeRoute: true,
+		swagger: {
+			info: {
+				title,
+				description,
+				version,
+			},
+			schemes: ["http", "https"],
+			consumes: ["application/json"],
+			produces: ["application/json"],
+			definitions,
+		},
+	});
 	await connect();
 	route(app);
 	return app;

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const dotenv = require('dotenv');
+const dotenv = require("dotenv"); //
 
 // setup connection configuration to mongodb instance
 /*
@@ -11,11 +11,11 @@ mongoose.connect("mongodb://localhost:27017/todo-cmsc100", {
 dotenv.config();
 
 // const dbName = process.env.DATABASE_NAME
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/todo-cmsc100"
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/todo-cmsc100";
 
 mongoose.connect(uri, {
 	useNewUrlParser: true,
-	useUnifiedTopology: true
+	useUnifiedTopology: true,
 });
 
 /**
